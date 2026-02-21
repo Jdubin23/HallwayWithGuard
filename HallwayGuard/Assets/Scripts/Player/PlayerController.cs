@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [Header("Camera Settings")]
     public float MouseSensitivity = 2f;
     public Vector2 lookInputVector;
-    private Vector2 smoothLookInput;
     private float xRotation = 0f;  
     public Transform CameraTransform;             // Reference to the camera transform
 
@@ -31,18 +30,21 @@ public class PlayerController : MonoBehaviour
     {
         //grab values from unity input system (for both mediums)
         lookInputVector = inputValue.Get<Vector2>();
-    }
-
-    
+    }    
     #endregion
+
 
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         // The cursor is automatically invisible when locked
         Cursor.visible = false; 
-        transform.rotation = Quaternion.identity; 
 
+    }
+
+    void Start()
+    {
+        CameraTransform.localRotation = Quaternion.Euler(90f, 90f, 90f); // Set initial rotation to Face forward
     }
 
     private void Update()
@@ -51,8 +53,6 @@ public class PlayerController : MonoBehaviour
         ManageLooking();
 
     }
-
-
 
 
     private void ManageMovement()
