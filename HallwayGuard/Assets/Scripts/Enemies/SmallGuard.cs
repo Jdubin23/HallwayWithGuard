@@ -10,6 +10,7 @@ public class SmallGuard : MonoBehaviour
     public float Speed = 3f;
     public NavMeshAgent Agent; // Reference to the NavMeshAgent component
     public Transform[] Waypoints; // Array of patrol points for the guard to move between
+    int m_CurrentWaypointIndex; 
 
     [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
     public bool IsChasing = false; // Only enables once the player is detected, disables patrol.
@@ -46,6 +47,11 @@ public class SmallGuard : MonoBehaviour
     }
     */
 
+    private void Awake()
+    {
+        
+    }
+    
     private void Patrol()
     {
         /* Things to include */
@@ -71,12 +77,16 @@ public class SmallGuard : MonoBehaviour
 
     void Start()
     {
-        
+        Agent.SetDestination(Waypoints[0].position); // Start patrolling towards the first waypoint
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Agent.remainingDistance < Agent.stoppingDistance)
+        {
+            m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % Waypoints.Length; // Moves guard to the following waypoints
+            Agent.SetDestination(Waypoints[m_CurrentWaypointIndex].position);
+        }
     }
 }
