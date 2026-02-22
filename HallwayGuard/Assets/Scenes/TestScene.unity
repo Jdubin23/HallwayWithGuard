@@ -412,6 +412,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 9123816368805805010}
+    - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: Speed
       value: 5
       objectReference: {fileID: 0}
@@ -433,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7669916839468776026, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: m_Constraints
-      value: 116
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 8674292717464280800, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: m_Name
@@ -444,6 +448,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
+--- !u!54 &9123816368805805010 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7669916839468776026, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
+  m_PrefabInstance: {fileID: 9123816368805805009}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

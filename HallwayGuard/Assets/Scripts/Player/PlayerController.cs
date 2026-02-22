@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     public float Speed = 5f;
     public Vector2 MovementInputVector;
+    public Rigidbody rb;
 
 
     [Header("Camera Settings")]
@@ -15,6 +16,9 @@ public class PlayerController : MonoBehaviour
     private float xRotation = 0f;  
     public Transform CameraTransform;             // Reference to the camera transform
 
+    [Header("Jump Settings")]
+    public float JumpHeight = 2f;                // Desired jump height
+    public bool IsGrounded;                      // Tracks if the player is touching the ground
 
      #region Input System Callbacks
 
@@ -31,6 +35,20 @@ public class PlayerController : MonoBehaviour
         //grab values from unity input system (for both mediums)
         lookInputVector = inputValue.Get<Vector2>();
     }    
+
+
+    public void OnJump(InputValue Value ) 
+    {
+        // Only jump when the button is first pressed AND the player is grounded
+        if (Value.isPressed && IsGrounded)
+        {
+            // Calculates the upward velocity needed to reach the desired jump height
+            float jumpVelocity = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
+
+            // Apply to the Rigidbody
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+        }
+    }
     #endregion
 
 
@@ -49,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f);
         ManageMovement();
         ManageLooking();
 
@@ -61,6 +80,7 @@ public class PlayerController : MonoBehaviour
         Vector3 posChange = transform.right * MovementInputVector.x + transform.forward * MovementInputVector.y;
         //change position of object based on new vectors we collected
         transform.position += posChange * Time.deltaTime * Speed; //5f is the speed of the player, can be changed to make the player move faster or slower
+     rb.linearVelocity = new Vector3(posChange.x * Speed, rb.linearVelocity.y, posChange.z * Speed );
     }
 
     private void ManageLooking()
