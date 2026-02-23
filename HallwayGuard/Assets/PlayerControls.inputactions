@@ -88,17 +88,6 @@
                 },
                 {
                     "name": "",
-                    "id": "09de90fe-5aa7-47a8-928a-58468fab3018",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9ad5b042-39a9-4a7d-ac6b-039e763ad74f",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
