@@ -8,6 +8,7 @@ public class SmallGuard : MonoBehaviour
 {
     
     public Transform Player; // Reference to the player's transform
+    public Observer Observer; // Reference to the Observer script to communicate player detection status
     
     [Header("Enemy Settings")]
     public float Speed = 3f;
@@ -27,6 +28,8 @@ public class SmallGuard : MonoBehaviour
     public bool LostPlayer = false; // Activates once the player is lost, disables chase.
     public bool IsCautious = false; // Activates once the player is lost, disables chase, activates caution.
 
+
+
     private void Awake()
     {
         Player = GameObject.Find("Player").transform; // Finds the player in the scene and assigns it to the Player variable
@@ -35,24 +38,28 @@ public class SmallGuard : MonoBehaviour
     
     private void Patrol()
     {
-        
-        if(Agent.remainingDistance < Agent.stoppingDistance)
+        if (IsPatrolling)
         {
-            m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % Waypoints.Length; // Moves guard to the following waypoints
-            Agent.SetDestination(Waypoints[m_CurrentWaypointIndex].position);
+            if(Agent.remainingDistance < Agent.stoppingDistance)
+            {
+                m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % Waypoints.Length; // Moves guard to the following waypoints
+                Agent.SetDestination(Waypoints[m_CurrentWaypointIndex].position);
+            } 
         }
-
-        
         
     }
-    private void Chase()
+    public void Chase()
     {
-        IsChasing = true; // sets state as true
-        IsPatrolling = false;
+        if (Observer.PlayerInRange)
+        {
+            IsPatrolling = false;
 
-        Speed = 4f; // Increase speed when chasing
+            Speed = 4f; // Increase speed when chasing
+            
+            Agent.SetDestination(Player.position); // Chase the player
+        }
         
-        Agent.SetDestination(Player.position); // Chase the player
+        
     }
 
     private void LosingPlayer()
@@ -84,22 +91,9 @@ public class SmallGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsPatrolling)
-        {
-            Patrol(); // Call the Patrol method every frame to handle patrolling behavior
-        }
-        else if (IsChasing)
-        {
-            Chase(); // Call the Chase method every frame to handle chasing behavior
-        }
-    }
+        Patrol();
+        Chase();
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.transform == Player)
-        {
-            IsChasing = true; // Player detected, start chasing
-        }
     }
 
     
