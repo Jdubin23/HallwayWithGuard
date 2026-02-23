@@ -19,7 +19,8 @@ public class Observer : MonoBehaviour
     {
         if (other.transform == Player)
         {
-            PlayerInRange = false; // Player has left the observer's range
+            PlayerInRange = false;
+            Guard.Caution(); // Player has left the observer's range
             Debug.Log("Player Lost!");
         }
     }
@@ -34,23 +35,30 @@ public class Observer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!PlayerInRange) return;
+        
+        
         if(PlayerInRange)
         {
-            Vector3 direction = Player.position - transform.position + Vector3.up;
+            Vector3 Origin = transform.position; // Ray starts from the guards position
+            Vector3 direction = Player.position - Origin;
+            float distance = direction.magnitude; // limits how far ray goes
+
+
             Ray ray = new Ray(transform.position, direction);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.transform == Player)
                 {
-                    PlayerInRange = true;
                     Guard.Chase(); // Call the Chase method in the SmallGuard script to start chasing the player
                     Debug.Log("Player Detected!");
                 }
                 else
                 {
-                    PlayerInRange = false;
+                    Guard.Caution(); // when player leaves hitbox for detection, guard goes into caution mode
                     Debug.Log("Player Lost!");
+
                 }
             }
         }

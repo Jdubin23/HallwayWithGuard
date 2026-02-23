@@ -56,7 +56,7 @@ public class SmallGuard : MonoBehaviour
 
             Speed = 4f; // Increase speed when chasing
             
-            Agent.SetDestination(Player.position); // Chase the player
+            
         }
         
         
@@ -77,8 +77,14 @@ public class SmallGuard : MonoBehaviour
     {
         
     }
-    private void Caution()
+    public void Caution()
     {
+        
+        IsChasing = false; // cancels chase
+        
+        
+
+        IsPatrolling = true; // makes patrolling true
         /* Things to include */
         /* 1. Caution Movement (Moves towards last known player position, doesn't collide with walls) */
     }
@@ -91,8 +97,15 @@ public class SmallGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Patrol();
-        Chase();
+        if (IsPatrolling)
+        {
+            Patrol();
+        }
+        if (IsChasing)
+        {
+            Agent.SetDestination(Player.position); // Chase the player
+        }
+        
 
     }
 
