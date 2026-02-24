@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Lever : MonoBehaviour, IInteractable
+public class Lever : MonoBehaviour, Interactable
 {
     [Header("Animation Settings")]
     [SerializeField] private bool isOn = false;
@@ -25,16 +25,12 @@ public class Lever : MonoBehaviour, IInteractable
             // Add code here to open a door, turn on a light, etc.
             if(targetObject != null)
         {
-                // If hideWhenOn is true: 
-                // Lever ON -> Object OFF (Active = false)
-                // Lever OFF -> Object ON (Active = true)
-                targetObject.SetActive(!(isOn && hideWhenOn));
+                targetObject.SetActive(!(isOn && hideWhenOn)); //make door disappear when lever is on.
             }
         }
         else
         {
             Debug.Log("Lever Pulled: OFF");
-            leverHandle.localRotation = Quaternion.Euler(LeverOff, 0, 0);
         }
     }
 }

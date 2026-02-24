@@ -62,12 +62,10 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactableLayer))
         {
-            Debug.Log("Raycast hit: " + hit.collider.name); // Debug log to confirm we hit something
             // Check if the object has an IInteractable interface
-            IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+            Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
             if (interactable != null)
             {
-                Debug.Log("Interactable object hit: " + hit.collider.name); // Debug log to confirm we hit an interactable object
                 interactable.Interact();
             }
         }
@@ -139,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
 
 }
-public interface IInteractable
+public interface Interactable
 {
     void Interact();
 }
