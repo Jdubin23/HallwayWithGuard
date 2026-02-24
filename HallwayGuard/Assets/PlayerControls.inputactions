@@ -45,7 +45,7 @@
                 {
                     "name": "Jump",
                     "type": "Button",
-                    "id": "9bb49109-bcbf-4566-bc94-30c9a2ccfe3d",
+                    "id": "c71f6953-d871-4d66-bf03-25378e015d17",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -66,8 +66,8 @@
                 },
                 {
                     "name": "",
-                    "id": "00f818c9-9592-48b0-9d9b-932a7f3f2d2b",
-                    "path": "<Gamepad>/rightTrigger",
+                    "id": "28893ec3-bcd1-4e51-a4c7-13612ac03cae",
+                    "path": "<Keyboard>/#(E)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -77,8 +77,8 @@
                 },
                 {
                     "name": "",
-                    "id": "28893ec3-bcd1-4e51-a4c7-13612ac03cae",
-                    "path": "<Keyboard>/#(E)",
+                    "id": "09de90fe-5aa7-47a8-928a-58468fab3018",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -242,7 +242,7 @@
                 },
                 {
                     "name": "",
-                    "id": "cebfddd3-078e-427e-9b8c-4d4edd82ae01",
+                    "id": "fbf09c9b-b3a2-4588-aff7-58151f2043e1",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
@@ -253,7 +253,7 @@
                 },
                 {
                     "name": "",
-                    "id": "9fc43b27-638d-4af0-99aa-a7432d73361d",
+                    "id": "06749edc-e35a-48f5-a53a-e5fdb01096b2",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",

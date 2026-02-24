@@ -6,7 +6,7 @@ public class Lever : MonoBehaviour, Interactable
     [SerializeField] private bool isOn = false;
     [SerializeField] private Transform leverHandle; // Reference to the part that moves
     [SerializeField] private float LeverOn = 45f;
-    [SerializeField] private float LeverOff = -45f;
+    //[SerializeField] private float LeverOff = -45f;
 
     [Header("Action Settings")]
     [SerializeField] private GameObject targetObject; // Drag the object you want to disappear here

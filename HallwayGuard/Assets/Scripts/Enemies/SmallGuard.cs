@@ -1,0 +1,124 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI; // For NavMeshAgent
+using UnityEngine.SceneManagement;
+
+
+public class SmallGuard : MonoBehaviour
+{
+    
+    public Transform Player; // Reference to the player's transform
+    public Observer Observer; // Reference to the Observer script to communicate player detection status
+    
+    [Header("Enemy Settings")]
+    public float Speed = 3f;
+    public NavMeshAgent Agent; // Reference to the NavMeshAgent component
+    public Transform[] Waypoints; // Array of patrol points for the guard to move between
+    int m_CurrentWaypointIndex; 
+    public Collider VisionCollider; // Collider used to detect the player within the guard's vision range
+    public bool PlayerDetected = false;
+
+    public float ChaseDuration;
+    public float CautionDuration;
+    
+
+    [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
+    public bool IsChasing = false; // Only enables once the player is detected, disables patrol.
+    public bool IsPatrolling = true; // Default State, only deactivates once chasing is enabled.
+    public bool LostPlayer = false; // Activates once the player is lost, disables chase.
+    public bool IsCautious = false; // Activates once the player is lost, disables chase, activates caution.
+
+
+
+    private void Awake()
+    {
+        Player = GameObject.Find("Player").transform; // Finds the player in the scene and assigns it to the Player variable
+        // will be useful for chasing the player
+    }
+    
+    private void Patrol()
+    {
+        if (IsPatrolling)
+        {
+            if(Agent.remainingDistance < Agent.stoppingDistance)
+            {
+                m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % Waypoints.Length; // Moves guard to the following waypoints
+                Agent.SetDestination(Waypoints[m_CurrentWaypointIndex].position);
+            } 
+        }
+        
+    }
+    public void Chase()
+    {
+        if (Observer.PlayerInRange)
+        {
+            IsPatrolling = false;
+            IsChasing = true;
+
+            Speed = 4f; // Increase speed when chasing
+            
+            
+        }
+        
+        
+    }
+
+    private void LosingPlayer()
+    {
+        IsChasing = false; // sets state as false
+        LostPlayer = true; // sets state as true
+
+        Speed = 2f; // Decrease speed when losing the player
+        
+        Agent.SetDestination(Player.position); // Move towards the last known player position
+
+    }
+
+    private void capturePlayer()
+    {
+        
+    }
+    public void Caution()
+    {
+        
+        IsChasing = false; // cancels chase
+        
+        
+
+        IsPatrolling = true; // makes patrolling true
+        /* Things to include */
+        /* 1. Caution Movement (Moves towards last known player position, doesn't collide with walls) */
+    }
+
+    void Start()
+    {
+        Agent.SetDestination(Waypoints[0].position); // Start patrolling towards the first waypoint
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (IsPatrolling)
+        {
+            Patrol();
+        }
+        if (IsChasing)
+        {
+            Agent.SetDestination(Player.position); // Chase the player
+        }
+        
+
+    }
+    //when colliding with player, End game or trigger capture state
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the object we bumped into is the player
+        if (collision.transform == Player)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        }
+    }
+
+}
