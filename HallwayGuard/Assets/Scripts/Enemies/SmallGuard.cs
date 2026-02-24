@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.AI; // For NavMeshAgent
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI; // For NavMeshAgent
+using UnityEngine.SceneManagement;
 
 
 public class SmallGuard : MonoBehaviour
@@ -109,6 +110,15 @@ public class SmallGuard : MonoBehaviour
         
 
     }
+    //when colliding with player, End game or trigger capture state
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the object we bumped into is the player
+        if (collision.transform == Player)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-    
+        }
+    }
+
 }
