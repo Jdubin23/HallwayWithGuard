@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class Observer : MonoBehaviour
+public class ObserverVar : MonoBehaviour
 {
     public Transform Player; // Reference to the player's transform
-    public SmallGuard Guard; // Reference to the SmallGuard script to communicate player detection status
+    public BigGuard Guard; // Reference to the big guard script to communicate player detection status
     public bool PlayerInRange;
 
     void OnTriggerEnter(Collider other)
@@ -11,7 +11,6 @@ public class Observer : MonoBehaviour
         if (other.transform == Player)
         {
             PlayerInRange = true; // Player has entered the observer's range
-            Debug.Log("Player Detected!");
         }
     }
 
@@ -21,7 +20,6 @@ public class Observer : MonoBehaviour
         {
             PlayerInRange = false;
             Guard.Caution(); // Player has left the observer's range
-            Debug.Log("Player Lost!");
         }
     }
     
@@ -47,14 +45,17 @@ public class Observer : MonoBehaviour
 
             Ray ray = new Ray(transform.position, direction);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, distance))
             {
+                // If it hits the Guard (the parent), it will fail this 'if'
                 if (hit.collider.transform == Player)
                 {
-                    Guard.Chase(); // Call the Chase method in the SmallGuard script to start chasing the player
-                    Debug.Log("Player Detected! raycast");
+                    Guard.Chase();
                 }
-                
+                else
+                {
+
+                }
             }
         }
     }
