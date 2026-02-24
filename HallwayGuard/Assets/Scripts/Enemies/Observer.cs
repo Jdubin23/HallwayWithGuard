@@ -24,21 +24,21 @@ public class Observer : MonoBehaviour
             Debug.Log("Player Lost!");
         }
     }
-    
-    
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!PlayerInRange) return;
-        
-        
-        if(PlayerInRange)
+
+
+        if (PlayerInRange)
         {
             Vector3 Origin = transform.position; // Ray starts from the guards position
             Vector3 direction = Player.position - Origin;
@@ -47,14 +47,17 @@ public class Observer : MonoBehaviour
 
             Ray ray = new Ray(transform.position, direction);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, distance))
             {
+                // If it hits the Guard (the parent), it will fail this 'if'
                 if (hit.collider.transform == Player)
                 {
-                    Guard.Chase(); // Call the Chase method in the SmallGuard script to start chasing the player
-                    Debug.Log("Player Detected! raycast");
+                    Guard.Chase();
                 }
-                
+                else
+                {
+
+                }
             }
         }
     }

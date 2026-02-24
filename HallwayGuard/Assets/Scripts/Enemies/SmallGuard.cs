@@ -53,6 +53,7 @@ public class SmallGuard : MonoBehaviour
         if (Observer.PlayerInRange)
         {
             IsPatrolling = false;
+            IsChasing = true;
 
             Speed = 4f; // Increase speed when chasing
             
