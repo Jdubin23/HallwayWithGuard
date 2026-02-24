@@ -99,19 +99,12 @@ public class PlayerController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        ManageVerticalLooking();
-
+        ManageCameraRotation();
     }
     private void FixedUpdate()
     {
         ManageMovement();
-        // Handle horizontal body rotation here so physics doesn't fight it
-        float mouseX = lookInputVector.x * MouseSensitivity;
-        if (Mathf.Abs(mouseX) > 0.01f)
-        {
-            Quaternion deltaRotation = Quaternion.Euler(0f, mouseX, 0f);
-            rb.MoveRotation(rb.rotation * deltaRotation);
-        }
+       
     }
 
 
@@ -124,16 +117,21 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector3(posChange.x * Speed, rb.linearVelocity.y, posChange.z * Speed);
     }
 
-    private void ManageVerticalLooking()
+    private void ManageCameraRotation()
     {
-
-        // Get Player Input
+        // Use Raw mouse delta for the most responsive feel
+        float mouseX = lookInputVector.x * MouseSensitivity;
         float mouseY = lookInputVector.y * MouseSensitivity;
 
+        // 1. Vertical Rotation (Camera only)
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
         CameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // 2. Horizontal Rotation (Applied directly to the Rigidbody)
+        // This allows the physics engine to sync the rotation with the interpolation
+        Vector3 bodyRotation = new Vector3(0, mouseX, 0);
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(bodyRotation));
     }
 
 
