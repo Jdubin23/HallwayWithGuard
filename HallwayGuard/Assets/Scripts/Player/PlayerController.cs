@@ -93,6 +93,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         IsGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f);
+        // Handle horizontal body rotation here so physics doesn't fight it
+        float mouseX = lookInputVector.x * MouseSensitivity;
+        if (Mathf.Abs(mouseX) > 0.01f)
+        {
+            Quaternion deltaRotation = Quaternion.Euler(0f, mouseX, 0f);
+            rb.MoveRotation(rb.rotation * deltaRotation);
+        }
 
 
     }
@@ -104,20 +111,14 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         ManageMovement();
-        // Handle horizontal body rotation here so physics doesn't fight it
-        float mouseX = lookInputVector.x * MouseSensitivity;
-        if (Mathf.Abs(mouseX) > 0.01f)
-        {
-            Quaternion deltaRotation = Quaternion.Euler(0f, mouseX, 0f);
-            rb.MoveRotation(rb.rotation * deltaRotation);
-        }
+        
     }
 
 
     private void ManageMovement()
     {
         //change the player object's position based on the input values
-        Vector3 posChange = transform.right * MovementInputVector.x + transform.forward * MovementInputVector.y;
+        Vector3 posChange = (transform.right * MovementInputVector.x) + (transform.forward * MovementInputVector.y);
         //change position of object based on new vectors we collected
         //transform.position += posChange * Time.deltaTime * Speed; //5f is the speed of the player, can be changed to make the player move faster or slower
      rb.linearVelocity = new Vector3(posChange.x * Speed, rb.linearVelocity.y, posChange.z * Speed );
