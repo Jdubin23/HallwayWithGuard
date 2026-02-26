@@ -1718,6 +1718,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigGuy
       objectReference: {fileID: 0}
+    - target: {fileID: 8532845290086363148, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1790,6 +1794,10 @@ PrefabInstance:
     - target: {fileID: 8658989173338566186, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
       propertyPath: m_Name
       value: SmallGuy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8658989173338566186, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

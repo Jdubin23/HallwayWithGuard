@@ -18,8 +18,8 @@ public class BigGuard : MonoBehaviour
     public Collider VisionCollider; // Collider used to detect the player within the guard's vision range
     public bool PlayerDetected = false;
 
-    public float ChaseDuration;
-    public float CautionDuration;
+    private float ChaseDuration = 2;
+    private float CautionDuration;
 
 
     [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
@@ -69,7 +69,7 @@ public class BigGuard : MonoBehaviour
     }
     public void Chase()
     {
-
+        CancelInvoke(nameof(Caution));
         IsPatrolling = false;
 
         Agent.speed = 3.5f; // Use Agent.speed to actually change NavMesh movement
@@ -79,17 +79,20 @@ public class BigGuard : MonoBehaviour
 
 
     }
-
+    public void StartChaseTimer()
+    {
+        // Only start the countdown if we are currently chasing
+        if (IsChasing)
+        {
+            Invoke(nameof(Caution), ChaseDuration); // ChaseDuration is your 2 seconds
+        }
+    }
     public void Caution()
     {
 
         IsChasing = false; // cancels chase
-
-
-
         IsPatrolling = true; // makes patrolling true
-        /* Things to include */
-        /* 1. Caution Movement (Moves towards last known player position, doesn't collide with walls) */
+        Agent.speed = Speed; // Reset speed to default
     }
     #endregion
 

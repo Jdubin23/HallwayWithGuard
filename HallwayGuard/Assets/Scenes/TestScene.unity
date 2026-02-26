@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2254901474409048218, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: m_Size.x
-      value: 2.134497
+      value: 9.120381
       objectReference: {fileID: 0}
     - target: {fileID: 2254901474409048218, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: m_Size.z
@@ -141,11 +141,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2254901474409048218, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: m_Center.x
-      value: 0.91225356
+      value: 4.405195
       objectReference: {fileID: 0}
     - target: {fileID: 2254901474409048218, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: m_Center.z
-      value: 0.023681706
+      value: 0.023680583
       objectReference: {fileID: 0}
     - target: {fileID: 4526604971592882672, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: Player
@@ -227,6 +227,18 @@ PrefabInstance:
       propertyPath: 'Waypoints2.Array.data[3]'
       value: 
       objectReference: {fileID: 2116837681}
+    - target: {fileID: 8312668222373678872, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8312668222373678872, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8312668222373678872, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8327136459998088811, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: m_Radius
       value: 0.52079463

@@ -19,7 +19,7 @@ public class ObserverVar : MonoBehaviour
         if (other.transform == Player)
         {
             PlayerInRange = false;
-            Guard.Caution(); // Player has left the observer's range
+            Guard.StartChaseTimer(); // Player has left the observer's range
         }
     }
     
