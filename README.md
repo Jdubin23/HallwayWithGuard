@@ -18,9 +18,17 @@ Here are the controls
 
      Mouse - Looking Around 
 
+     Spacebar - Jump
+
+     E - Interact
+
 **Controller**
 
      Left Joystick - Looking Around
      
      Right Joystick - Moving Around
+
+     East Button or RT - Interact
+
+     South Button - Jump
     
