@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Camera Settings")]
-    public float MouseSensitivity = 2f;
+    public float Sensitivity = 2f;
     public Vector2 lookInputVector;
     private float xRotation = 0f;
     public Transform CameraTransform;             // Reference to the camera transform
@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     [Header("Jump Settings")]
     public float JumpHeight = 1f;                // Desired jump height
     public bool IsGrounded;                      // Tracks if the player is touching the ground
+
+    // Adjust this once to make the controller feel 'equal' to the mouse at Sensitivity 1
+    [SerializeField] private float controllerBaseWeight = 150f;
 
     #region Input System Callbacks
 
@@ -119,19 +122,32 @@ public class PlayerController : MonoBehaviour
 
     private void ManageCameraRotation()
     {
-        // Use Raw mouse delta for the most responsive feel
-        float mouseX = lookInputVector.x * MouseSensitivity;
-        float mouseY = lookInputVector.y * MouseSensitivity;
+        // 1. Identify the device
+        bool isGamepad = Gamepad.current != null &&
+                         lookInputVector == Gamepad.current.rightStick.ReadValue();
 
-        // 1. Vertical Rotation (Camera only)
-        xRotation -= mouseY;
+        float finalX, finalY;
+
+        if (isGamepad)
+        {
+            // For Controller: Use the Base Weight * User Sensitivity * DeltaTime
+            // This scales the 0-1 stick input into a usable rotation speed
+            finalX = lookInputVector.x * (Sensitivity * controllerBaseWeight) * Time.deltaTime;
+            finalY = lookInputVector.y * (Sensitivity * controllerBaseWeight) * Time.deltaTime;
+        }
+        else
+        {
+            // For Mouse: Just the Raw Delta * User Sensitivity
+            finalX = lookInputVector.x * Sensitivity;
+            finalY = lookInputVector.y * Sensitivity;
+        }
+
+        // 2. Apply Rotations
+        xRotation -= finalY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         CameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        // 2. Horizontal Rotation (Applied directly to the Rigidbody)
-        // This allows the physics engine to sync the rotation with the interpolation
-        Vector3 bodyRotation = new Vector3(0, mouseX, 0);
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(bodyRotation));
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, finalX, 0));
     }
 
 
