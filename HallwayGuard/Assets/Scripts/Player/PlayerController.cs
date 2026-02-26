@@ -15,7 +15,8 @@ public class PlayerController : MonoBehaviour
     public Vector2 lookInputVector;
     private float xRotation = 0f;
     public Transform CameraTransform;             // Reference to the camera transform
-
+    [SerializeField] private float controllerBaseWeight = 125f; // Multiplier to equal controller movement to mouse movement
+    [SerializeField] private float mouseDamping = 0.05f; //limiter to reduce sensitivity back to normal amount
     [SerializeField] private float interactRange = 5f;
     [SerializeField] private LayerMask interactableLayer;
     private Camera cam;
@@ -24,8 +25,7 @@ public class PlayerController : MonoBehaviour
     public float JumpHeight = 1f;                // Desired jump height
     public bool IsGrounded;                      // Tracks if the player is touching the ground
 
-    // Adjust this once to make the controller feel 'equal' to the mouse at Sensitivity 1
-    [SerializeField] private float controllerBaseWeight = 150f;
+
 
     #region Input System Callbacks
 
@@ -46,11 +46,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputValue Value)
     {
-        Debug.Log("Jump button pressed");
         // Only jump when the button is first pressed AND the player is grounded
         if (Value.isPressed && IsGrounded)
         {
-            Debug.Log("Jump Should be recognized");
             // Calculates the upward velocity needed to reach the desired jump height
             float jumpVelocity = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
 
@@ -138,8 +136,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             // For Mouse: Just the Raw Delta * User Sensitivity
-            finalX = lookInputVector.x * Sensitivity;
-            finalY = lookInputVector.y * Sensitivity;
+            finalX = lookInputVector.x * (Sensitivity * mouseDamping);
+            finalY = lookInputVector.y * (Sensitivity * mouseDamping);
         }
 
         // 2. Apply Rotations

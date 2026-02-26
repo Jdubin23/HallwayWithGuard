@@ -204,6 +204,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1682894041}
     - target: {fileID: 8019697438940533958, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
+      propertyPath: ChaseDuration
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8019697438940533958, guid: 0d8c50b6b4929f94e955a089cca420c7, type: 3}
       propertyPath: Waypoints2.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -2417,7 +2421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6455177995367925155, guid: e92213e640275cc4885560183ab1ff03, type: 3}
       propertyPath: m_AgentTypeID
-      value: 1479372276
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6455177995367925155, guid: e92213e640275cc4885560183ab1ff03, type: 3}
       propertyPath: m_NavMeshData
