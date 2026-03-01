@@ -18,9 +18,21 @@ public class SmallGuard : MonoBehaviour
     int m_CurrentWaypointIndex; 
     public Collider VisionCollider; // Collider used to detect the player within the guard's vision range
     public bool PlayerDetected = false;
-
     public float ChaseDuration;
     public float CautionDuration;
+
+    [Header("Dash Settings")]
+    // public float dashSpeed;
+    public float dashDuration;
+    private Vector3 dashDirection;
+    public float stunDuration;
+    private float dashTimer;
+    private Vector3 savedPosition; //last saved player position
+    public bool isDashing;
+    
+
+    public LayerMask Wall;
+    
     
 
     [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
@@ -37,6 +49,8 @@ public class SmallGuard : MonoBehaviour
         // will be useful for chasing the player
     }
     
+    
+    #region State Behaviors
     private void Patrol()
     {
         if (IsPatrolling)
@@ -51,45 +65,73 @@ public class SmallGuard : MonoBehaviour
     }
     public void Chase()
     {
-        if (Observer.PlayerInRange)
+        CancelInvoke(nameof(Caution));
+        IsPatrolling = false;
+        IsChasing = true;
+        Agent.speed = 10f; // Use Agent.speed to actually change NavMesh movement
+
+
+        // Chase behavior is a single, fast dash to the player.
+        Agent.enabled = false; // disable navmesh.
+
+        
+        
+        dashTimer = dashDuration;
+        savedPosition = Player.position;
+        
+        dashDirection = (savedPosition - transform.position).normalized;
+        transform.forward = dashDirection;
+        
+        
+        //transform.position += dashDirection * Agent.speed * Time.deltaTime;
+        //dashTimer -= Time.deltaTime;
+        
+        
+        /*
+        if (dashTimer <= 0f)
         {
-            IsPatrolling = false;
-            IsChasing = true;
-
-            Speed = 4f; // Increase speed when chasing
-            
-            
+            Stun();
         }
+        */
+
+        // Remove the 'if (Observer.PlayerInRange)' line
+        isDashing = true; // You need to set this to true so Update() knows to follow the player
         
         
     }
-
-    private void LosingPlayer()
+    void Dash()
     {
-        IsChasing = false; // sets state as false
-        LostPlayer = true; // sets state as true
-
-        Speed = 2f; // Decrease speed when losing the player
-        
-        Agent.SetDestination(Player.position); // Move towards the last known player position
-
+        transform.position += dashDirection * 10f * Time.deltaTime;
     }
 
-    private void capturePlayer()
+    
+    public void StartChaseTimer()
     {
-        
+        // Only start the countdown if we are currently chasing
+        if (IsChasing)
+        {
+            Invoke(nameof(Caution), ChaseDuration); // ChaseDuration is your 2 seconds
+        }
     }
     public void Caution()
     {
-        
-        IsChasing = false; // cancels chase
-        
-        
 
+        IsChasing = false; // cancels chase
         IsPatrolling = true; // makes patrolling true
-        /* Things to include */
-        /* 1. Caution Movement (Moves towards last known player position, doesn't collide with walls) */
+        Agent.speed = Speed; // Reset speed to default
     }
+
+    public void Stun()
+    {
+        Debug.Log("Brother is Stunned! Get out of there!");
+        IsChasing = false;
+        IsPatrolling = false; // both states are false for a bit.
+        
+        Invoke(nameof(Patrol), stunDuration);
+        // being stunned means 
+    }
+    #endregion
+    
 
     void Start()
     {
@@ -105,7 +147,11 @@ public class SmallGuard : MonoBehaviour
         }
         if (IsChasing)
         {
-            Agent.SetDestination(Player.position); // Chase the player
+            Chase();
+        }
+        if (isDashing)
+        {
+            Dash();
         }
         
 
@@ -113,12 +159,27 @@ public class SmallGuard : MonoBehaviour
     //when colliding with player, End game or trigger capture state
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the object we bumped into is the player
-        if (collision.transform == Player)
+        if (IsChasing)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            /*
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            {
+                Stun();
+            }
+            */
 
+
+            if (collision.transform == Player)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            } 
         }
+        
+        // Check if the object we bumped into is the player
+        
     }
+
+    
 
 }

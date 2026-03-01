@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class Observer : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class Observer : MonoBehaviour
         if (other.transform == Player)
         {
             PlayerInRange = true; // Player has entered the observer's range
-            Debug.Log("Player Detected!");
+            StartCoroutine(chaseTiming());
         }
     }
 
@@ -20,8 +22,18 @@ public class Observer : MonoBehaviour
         if (other.transform == Player)
         {
             PlayerInRange = false;
-            Guard.Caution(); // Player has left the observer's range
+            // Player has left the observer's range
             Debug.Log("Player Lost!");
+        }
+    }
+
+    IEnumerator chaseTiming ()
+    {
+        yield return new WaitForSeconds(2f);
+
+        if (PlayerInRange)
+        {
+            Guard.Chase();
         }
     }
 
@@ -52,7 +64,8 @@ public class Observer : MonoBehaviour
                 // If it hits the Guard (the parent), it will fail this 'if'
                 if (hit.collider.transform == Player)
                 {
-                    Guard.Chase();
+                    Debug.Log("Prepare for dash!");
+                    chaseTiming();
                 }
                 else
                 {
