@@ -15,5 +15,5 @@ EditorBuildSettings:
     path: Assets/Scenes/ArtTestScene.unity
     guid: 3db5cf0d4f2481c4cb4597dc46807968
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 1c59dded9ecc1bc49bb1abc14aa9ed12, type: 3}
   m_UseUCBPForAssetBundles: 0
