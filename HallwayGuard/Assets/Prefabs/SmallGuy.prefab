@@ -200,13 +200,13 @@ MonoBehaviour:
   Observer: {fileID: 1910685565693159193}
   Speed: 3
   Agent: {fileID: 9114514260888948183}
-  Waypoints:
+  Waypoints2:
   - {fileID: 0}
   - {fileID: 0}
   VisionCollider: {fileID: 6641135547307535569}
   PlayerDetected: 0
-  ChaseDuration: 2
-  CautionDuration: 0
+  chaseDelay: 1
+  chaseSpeed: 6
   IsChasing: 0
   IsPatrolling: 1
   LostPlayer: 0
