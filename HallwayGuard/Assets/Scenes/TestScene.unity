@@ -3646,7 +3646,7 @@ MonoBehaviour:
   m_MoveAction: {fileID: 4150139998992689543, guid: 1c59dded9ecc1bc49bb1abc14aa9ed12, type: 3}
   m_SubmitAction: {fileID: 0}
   m_CancelAction: {fileID: 0}
-  m_LeftClickAction: {fileID: 6801936139017062313, guid: 1c59dded9ecc1bc49bb1abc14aa9ed12, type: 3}
+  m_LeftClickAction: {fileID: 5309665399895792902, guid: 1c59dded9ecc1bc49bb1abc14aa9ed12, type: 3}
   m_MiddleClickAction: {fileID: 0}
   m_RightClickAction: {fileID: 0}
   m_ScrollWheelAction: {fileID: 0}
@@ -4658,6 +4658,14 @@ PrefabInstance:
       objectReference: {fileID: 1778491361}
     - target: {fileID: 4335705380949967163, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
       propertyPath: 'Waypoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2067988164}
+    - target: {fileID: 4335705380949967163, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
+      propertyPath: 'Waypoints2.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1778491361}
+    - target: {fileID: 4335705380949967163, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
+      propertyPath: 'Waypoints2.Array.data[1]'
       value: 
       objectReference: {fileID: 2067988164}
     - target: {fileID: 6641135547307535569, guid: 8eacb8be14e922f499f6d4db9dd05042, type: 3}
