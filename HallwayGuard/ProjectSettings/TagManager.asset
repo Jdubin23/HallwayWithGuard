@@ -15,9 +15,9 @@ TagManager:
   - Enemy
   - Player
   - Wall
-  - 
-  - 
-  - 
+  - Exit
+  - Start
+  - Battery
   - 
   - 
   - 
