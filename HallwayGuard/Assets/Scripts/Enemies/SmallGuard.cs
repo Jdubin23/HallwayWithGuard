@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class SmallGuard : MonoBehaviour
 {
     
+    
     public Transform Player; // Reference to the player's transform
     public Observer Observer; // Reference to the Observer script to communicate player detection status
 
@@ -27,13 +28,17 @@ public class SmallGuard : MonoBehaviour
     private Vector3 chaseDirection;
     public float chaseSpeed;
 
+    [Header("Stun Settings")]
+    public float stunDuration = 4f;
+    
+
 
     [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
     public bool IsChasing = false; // Only enables once the player is detected, disables patrol.
     public bool IsPatrolling = true; // Default State, only deactivates once chasing is enabled.
     public bool LostPlayer = false; // Activates once the player is lost, disables chase.
     public bool IsCautious = false; // Activates once the player is lost, disables chase, activates caution.
-    
+    public bool IsStunned = false;
 
     #region Awake, Start, Update
     private void Awake()
@@ -50,17 +55,35 @@ public class SmallGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsStunned)
+        {
+            return; // prevents any other behavior while stunned
+        }
         if (IsPatrolling)
-            {
-                Patrol();
-            }
+        {
+            Patrol();
+        }
         if (IsChasing)
+        {
+            float moveDistance = chaseSpeed * Time.deltaTime;
+
+            if(!Physics.Raycast(transform.position, chaseDirection, moveDistance))
             {
-                transform.position += chaseDirection * chaseSpeed * Time.deltaTime;
-                
-                //Invoke(nameof(Chase), chaseDelay); // Chase the player
+                transform.position += chaseDirection * moveDistance;
             }
+            else
+            {
+                Stun();
+            }
+            
+            
+            //transform.position += chaseDirection * chaseSpeed * Time.deltaTime;
+                
+            //Invoke(nameof(Chase), chaseDelay); // Chase the player
+        }
     }
+
+    
     #endregion
 
     #region State Behaviors
@@ -80,25 +103,30 @@ public class SmallGuard : MonoBehaviour
     }
     public void Chase()
     {
+        if (IsChasing) return; // prevents enemy from homing into the player
+        
         CancelInvoke(nameof(Caution));
         Agent.speed = 6f; // Use Agent.speed to actually change NavMesh movement
         IsPatrolling = false;
-        
-        IsChasing = true; // You need to set this to true so Update() knows to follow the player
+        IsStunned = false;
 
         lastLocation = Player.position;
+        Vector3 Grounded = new Vector3(lastLocation.x, transform.position.y, lastLocation.z);
+        // If only using last location, guard lifts off the ground.
 
-        chaseDirection = (lastLocation - transform.position).normalized;
+        chaseDirection = (Grounded - transform.position).normalized;
 
         transform.forward = chaseDirection;
         
         Agent.enabled = false;
         
         StartCoroutine(ChaseDelay());
+
+        
         
     }
 
-    IEnumerator ChaseDelay()
+    IEnumerator ChaseDelay() //causes guard to wait a bit before chasign the player
     {
         yield return new WaitForSeconds(chaseDelay);
 
@@ -123,12 +151,26 @@ public class SmallGuard : MonoBehaviour
 
     public void Stun()
     {
-        IsChasing = false;
+        // Behavior after hitting wall
+        IsStunned = true;
+        IsChasing = false; //chase behavior stops completely
+        IsPatrolling = false;
 
-        Agent.enabled = true;
-        IsPatrolling = true;
+        Agent.enabled = true; // navMesh still not enabled
 
-        Agent.SetDestination(Waypoints2[m_CurrentWaypointIndex].position);
+        Invoke(nameof(Recover), stunDuration);
+    }
+
+    public void Recover()
+    {
+        Agent.enabled = true; //navMesh is available again, allowing patrolling
+        Agent.speed = Speed; // resets speed back to normal
+        IsPatrolling = true; // enables patrolling
+
+        IsStunned = false;
+
+        Agent.SetDestination(Waypoints2[m_CurrentWaypointIndex].position); //reenables waypoints
+        
     }
     #endregion
 
@@ -143,6 +185,7 @@ public class SmallGuard : MonoBehaviour
         
         if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
+            Agent.enabled = true; //transform.position ignores colliders, so we enable the agent 
             Stun();
         }
         

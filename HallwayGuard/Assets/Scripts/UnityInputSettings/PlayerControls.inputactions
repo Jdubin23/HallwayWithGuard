@@ -238,7 +238,7 @@
             "id": "63c2c021-a5dd-481a-8917-89a516ef8cef",
             "actions": [
                 {
-                    "name": "Interact",
+                    "name": "Select",
                     "type": "Button",
                     "id": "cbd12bc9-bb0d-4837-98ce-98deff79b27b",
                     "expectedControlType": "",
@@ -273,7 +273,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -284,7 +284,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -295,7 +295,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
