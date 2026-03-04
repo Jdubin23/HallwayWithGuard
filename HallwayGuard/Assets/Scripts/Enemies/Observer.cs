@@ -2,62 +2,55 @@ using UnityEngine;
 
 public class Observer : MonoBehaviour
 {
-    public Transform Player; // Reference to the player's transform
-    public SmallGuard Guard; // Reference to the big guard script to communicate player detection status
+    public Transform Player; 
+    public SmallGuard Guard; 
     public bool PlayerInRange;
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform == Player)
+        // Use CompareTag for better performance and reliability
+        if (other.CompareTag("Player"))
         {
-            PlayerInRange = true; // Player has entered the observer's range
+            PlayerInRange = true;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.transform == Player)
+        if (other.CompareTag("Player"))
         {
             PlayerInRange = false;
-            Guard.StartChaseTimer(); // Player has left the observer's range
+            // Guard.StartChaseTimer(); // Optional: used for the 2-second caution window
         }
     }
-    
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        if (!PlayerInRange) return;
-        
-        
-        if(PlayerInRange)
+        if (!PlayerInRange || Player == null) return;
+
+        // Origin point: move it slightly up (e.g., eye level) so it doesn't hit the floor
+        Vector3 origin = transform.position + Vector3.up * 0.5f; 
+        Vector3 targetPos = Player.position + Vector3.up * 0.5f;
+        Vector3 direction = targetPos - origin;
+        float distance = direction.magnitude;
+
+        Ray ray = new Ray(origin, direction);
+        RaycastHit hit;
+
+        // Use a LayerMask to ignore the Guard itself
+        // Ensure the Guard is on the "Enemy" layer in the Inspector!
+        int layerMask = ~LayerMask.GetMask("Enemy"); 
+
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
-            Vector3 Origin = transform.position; // Ray starts from the guards position
-            Vector3 direction = Player.position - Origin;
-            float distance = direction.magnitude; // limits how far ray goes
-
-
-            Ray ray = new Ray(transform.position, direction);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, distance))
+            if (hit.collider.transform == Player)
             {
-                // If it hits the Guard (the parent), it will fail this 'if'
-                if (hit.collider.transform == Player)
-                {
-                    Debug.Log("Player Detected by Observer");
-                    Guard.Chase();
-                }
-                else
-                {
-
-                }
+                // IMPORTANT: This calls the charge behavior
+                Guard.Chase();
             }
         }
+        
+        // Debug line to see the vision in the Scene view (Green = seeing player)
+        Debug.DrawRay(origin, direction, Color.green);
     }
 }
