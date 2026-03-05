@@ -1822,6 +1822,14 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 9123816368805805016}
+    - target: {fileID: 5306151955647380321, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.383
+      objectReference: {fileID: 0}
+    - target: {fileID: 5306151955647380321, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.418
+      objectReference: {fileID: 0}
     - target: {fileID: 6709712032383065253, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.357426
@@ -1862,22 +1870,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7495599159534684342, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_Radius
+      value: 0.42112917
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495599159534684342, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_Center.x
+      value: -1.0081108e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495599159534684342, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_Center.y
+      value: 0.41737664
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495599159534684342, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
+      propertyPath: m_Center.z
+      value: 0.42700207
+      objectReference: {fileID: 0}
     - target: {fileID: 7917495615127140049, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
       propertyPath: m_Name
       value: BigGuy
-      objectReference: {fileID: 0}
-    - target: {fileID: 7917495615127140049, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8413262391013462555, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
       propertyPath: Player
       value: 
       objectReference: {fileID: 9123816368805805016}
-    - target: {fileID: 8413262391013462555, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
-      propertyPath: Observer
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8413262391013462555, guid: 253c10d4b70ef7042b83953dc826d333, type: 3}
       propertyPath: Waypoints2.Array.size
       value: 4
