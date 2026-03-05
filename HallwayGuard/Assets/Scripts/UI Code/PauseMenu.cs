@@ -9,9 +9,13 @@ public class PauseMenu : MonoBehaviour
     private PlayerControls playerControls; //reference to the player controller script to access the input system
     private InputAction pauseAction; //recognizes when you press a pause button
 
-[SerializeField] private GameObject pauseMenuUI; //reveals pause menu and allows it to be disabled
-[SerializeField] private bool GameIsPaused; // allows for me to pause time when the game is paused and unpause when the game is resumed
-[SerializeField] private PlayerController playerScript; // Drag your Player object here in Inspector
+    [SerializeField] private GameObject pauseMenuUI; //reveals pause menu and allows it to be disabled
+    [SerializeField] private bool GameIsPaused; // allows for me to pause time when the game is paused and unpause when the game is resumed
+    [SerializeField] private PlayerController playerScript; // Drag your Player object here in Inspector
+
+    [SerializeField] private InventoryManager Inventory; // Reference to the inventory manager to check if the player has the battery for the icon
+
+    [SerializeField] private GameObject batteryIcon;
 
     void Awake()
     {
@@ -65,6 +69,10 @@ void OnPauseToggle(InputAction.CallbackContext context)
         Cursor.visible = true; //makes the cursor visible in the pause menu
 
         playerScript.enabled = false; // This stops Update/FixedUpdate in the player script
+        if (Inventory != null)
+        {
+            batteryIcon.SetActive(Inventory.hasBattery);
+        }
     }
 
   
@@ -81,6 +89,7 @@ void OnPauseToggle(InputAction.CallbackContext context)
         Cursor.visible = false; //makes the cursor invisible in the game menu
 
         playerScript.enabled = true; // This stops Update/FixedUpdate in the player script
+        batteryIcon.SetActive(false);
     }
 
 }
