@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private PlayerControls playerControls; //reference to the player controller script to access the input system
+    [SerializeField] private PlayerInput playerInput; //recognizes which controls are being used
     private InputAction pauseAction; //recognizes when you press a pause button
 
     [SerializeField] private GameObject pauseMenuUI; //reveals pause menu and allows it to be disabled
@@ -28,14 +29,34 @@ public class PauseMenu : MonoBehaviour
         pauseAction = playerControls.UI.Pause; //reference the pause button in the input system
         pauseAction.Enable(); //enable the pause button to be recognized
         pauseAction.performed += OnPauseToggle; //enables listener for the pause button to trigger the OnPauseToggle function when pressed
+
+        if (playerInput != null)
+        {
+            playerInput.onControlsChanged += OnControlsChanged; //enable the player controls to be recognized
+        }
     }
     private void OnDisable()
     {
         pauseAction.Disable();
         pauseAction.performed -= OnPauseToggle; // removes the listener for the pause button when the script is disabled to prevent errors and unintended behavior
-
+        if (playerInput != null)
+            playerInput.onControlsChanged -= OnControlsChanged;
     }
 
+private void OnControlsChanged(PlayerInput input)
+    {
+        // Check if the current scheme is "Gamepad" (or whatever yours is named)
+        if (input.currentControlScheme == "Gamepad")
+        {
+            Cursor.lockState = CursorLockMode.Locked; //Locks the cursor.
+            Cursor.visible = false; //hide cursor for better gamepad experience.
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None; //unlocks the cursor so it can be used in the pause menu
+        Cursor.visible = true; //makes the cursor visible in the pause menu
+        }
+    }
 
 void OnPauseToggle(InputAction.CallbackContext context)
     {
@@ -53,21 +74,23 @@ void OnPauseToggle(InputAction.CallbackContext context)
             }
             else
             {
-                Pause();
+                Pause(playerInput);
             }
         }
     }
 
-    public void Pause()
+    public void Pause(PlayerInput input)
     {
         GameIsPaused = true; //sets the pause state to true
         Time.timeScale = 0f; //pauses the game by setting time scale to 0
         AudioListener.pause = true; //pauses all audio in the game
-        
         pauseMenuUI.SetActive(true); //reveals the pause menu UI
 
-        Cursor.lockState = CursorLockMode.None; //unlocks the cursor so it can be used in the pause menu
-        Cursor.visible = true; //makes the cursor visible in the pause menu
+        OnControlsChanged(playerInput);
+
+        EventSystem.current.SetSelectedGameObject(null);
+        GameObject firstButton = pauseMenuUI.GetComponentInChildren<Button>().gameObject;
+        EventSystem.current.SetSelectedGameObject(firstButton);
 
         playerScript.enabled = false; // This stops Update/FixedUpdate in the player script
         if (Inventory != null)

@@ -27,7 +27,6 @@ public class ObserverVar : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -52,6 +51,7 @@ public class ObserverVar : MonoBehaviour
                 {
                     Debug.Log("Player Detected by Observer");
                     Guard.Chase();
+                    
                 }
                 else
                 {

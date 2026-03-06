@@ -17,9 +17,7 @@ public class BigGuard : MonoBehaviour
     int m_CurrentWaypointIndex;
     public Collider VisionCollider; // Collider used to detect the player within the guard's vision range
     public bool PlayerDetected = false;
-
     private float ChaseDuration = 2;
-    private float CautionDuration;
 
 
     [Header("State Settings")] // Bools for what state the guard is currently in. Might make these separate classes inheriting the behavior depending on the how the script develops
@@ -27,6 +25,10 @@ public class BigGuard : MonoBehaviour
     public bool IsPatrolling = true; // Default State, only deactivates once chasing is enabled.
     public bool LostPlayer = false; // Activates once the player is lost, disables chase.
     public bool IsCautious = false; // Activates once the player is lost, disables chase, activates caution.
+
+    [Header("Audio Sources")]
+    public AudioSource chaseAudio;
+    public AudioSource SlowStompAudio;
 
 
 
@@ -39,11 +41,16 @@ public class BigGuard : MonoBehaviour
     void Start()
     {
         Agent.SetDestination(Waypoints2[0].position); // Start patrolling towards the first waypoint
+        if(chaseAudio == null) chaseAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (SlowStompAudio != null && !SlowStompAudio.isPlaying)
+                {
+                    SlowStompAudio.Play();
+                }
         if (IsPatrolling)
             {
                 Patrol();
@@ -57,6 +64,12 @@ public class BigGuard : MonoBehaviour
     #region State Behaviors
     private void Patrol()
     {
+        if (chaseAudio != null && chaseAudio.isPlaying)
+        {
+            chaseAudio.Stop();
+        }
+
+            
         if (IsPatrolling)
         {
             if (Agent.remainingDistance < Agent.stoppingDistance)
@@ -76,7 +89,10 @@ public class BigGuard : MonoBehaviour
 
         // Remove the 'if (Observer.PlayerInRange)' line
         IsChasing = true; // You need to set this to true so Update() knows to follow the player
-
+        if (chaseAudio != null && !chaseAudio.isPlaying)
+        {
+            chaseAudio.Play();
+        }
 
     }
     public void StartChaseTimer()
@@ -93,6 +109,7 @@ public class BigGuard : MonoBehaviour
         IsChasing = false; // cancels chase
         IsPatrolling = true; // makes patrolling true
         Agent.speed = Speed; // Reset speed to default
+        
     }
     #endregion
 

@@ -23,6 +23,7 @@ public class Observer : MonoBehaviour
             // Guard.StartChaseTimer(); // Optional: used for the 2-second caution window
         }
     }
+    
 
     void Update()
     {
@@ -47,6 +48,7 @@ public class Observer : MonoBehaviour
             {
                 // IMPORTANT: This calls the charge behavior
                 Guard.Chase();
+                
             }
         }
         
