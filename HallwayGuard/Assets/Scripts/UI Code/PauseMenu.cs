@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI; 
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -90,6 +91,13 @@ void OnPauseToggle(InputAction.CallbackContext context)
 
         playerScript.enabled = true; // This stops Update/FixedUpdate in the player script
         batteryIcon.SetActive(false);
+    }
+
+    public void Exit()
+    {
+       //for build testing not ready in editor yet but this would bring you to the main menu scene when the button is clicked in the pause menu
+        Application.Quit();
+
     }
 
 }
