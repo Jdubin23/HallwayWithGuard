@@ -15,6 +15,7 @@ public class Lever : MonoBehaviour, Interactable
     [SerializeField] private Color activeColor = Color.limeGreen;
     [SerializeField] private Color inactiveColor = Color.coral;
 
+
 public void Start()
     {
         foreach (Renderer rend in targetRenderers)
@@ -33,6 +34,7 @@ public void Start()
         if (isOn)
         {
             Debug.Log("Lever Pulled: ON");
+            
             // Tell the manager this lever was pulled
             Object.FindFirstObjectByType<LeverManager>().LeverPulled(this);
         }

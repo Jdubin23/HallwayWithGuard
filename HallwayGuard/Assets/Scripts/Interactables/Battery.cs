@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BatteryItem : MonoBehaviour, Interactable
 {
+        public AudioSource PickupAudio;
+        public GameObject BatteryObject;
     public void Interact()
     {
         // Find the inventory and tell it we have the battery
@@ -9,8 +11,11 @@ public class BatteryItem : MonoBehaviour, Interactable
         
         //Debug.Log("Battery Picked Up!");
         //make noise for this?
-        
+        if(PickupAudio != null && !PickupAudio.isPlaying)
+        {
+            PickupAudio.Play();
+        }
         // Make the physical item in the world disappear
-        gameObject.SetActive(false);
+        BatteryObject.SetActive(false);
     }
 }

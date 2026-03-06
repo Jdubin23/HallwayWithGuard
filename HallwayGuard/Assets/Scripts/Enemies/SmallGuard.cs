@@ -40,6 +40,10 @@ public class SmallGuard : MonoBehaviour
     public bool IsCautious = false; // Activates once the player is lost, disables chase, activates caution.
     public bool IsStunned = false;
 
+    [Header("Audio Sources")]
+    public AudioSource chaseAudio;
+    public AudioSource MovementAudio;
+
     #region Awake, Start, Update
     private void Awake()
     {
@@ -55,6 +59,10 @@ public class SmallGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (MovementAudio != null && !MovementAudio.isPlaying)
+                {
+                    MovementAudio.Play();
+                }
         if (IsStunned)
         {
             return; // prevents any other behavior while stunned
@@ -65,6 +73,10 @@ public class SmallGuard : MonoBehaviour
         }
         if (IsChasing)
         {
+            if (chaseAudio != null && chaseAudio.isPlaying)
+        {
+            chaseAudio.Stop();
+        }
             float moveDistance = chaseSpeed * Time.deltaTime;
 
             if(!Physics.Raycast(transform.position, chaseDirection, moveDistance))
@@ -103,6 +115,11 @@ public class SmallGuard : MonoBehaviour
     }
     public void Chase()
     {
+
+        if (chaseAudio != null && !chaseAudio.isPlaying)
+        {
+            chaseAudio.Play();
+        }
         if (IsChasing) return; // prevents enemy from homing into the player
         
         CancelInvoke(nameof(Caution));
