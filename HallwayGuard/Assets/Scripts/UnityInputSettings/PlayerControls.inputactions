@@ -68,17 +68,6 @@
                 },
                 {
                     "name": "",
-                    "id": "09de90fe-5aa7-47a8-928a-58468fab3018",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Computer",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9ad5b042-39a9-4a7d-ac6b-039e763ad74f",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -247,6 +236,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Click",
+                    "type": "PassThrough",
+                    "id": "018d260d-cef7-4260-9d69-17fecebcdfdb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Point",
                     "type": "Value",
                     "id": "a2d2b843-d571-40af-a10f-a208920d3dee",
@@ -283,6 +281,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9abbc05f-e24d-466a-9107-8ee33714a78e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Computer",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

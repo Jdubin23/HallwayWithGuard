@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement; 
+using System.Collections.Generic;
+
 
 public class PauseMenu : MonoBehaviour
 {
@@ -60,14 +63,11 @@ private void OnControlsChanged(PlayerInput input)
 
 void OnPauseToggle(InputAction.CallbackContext context)
     {
-        Debug.Log("Toggle Fired");
+        if (context.control.device is Pointer) return;
         if (context.performed) //only pause when the button is first pressed, not when it is held down
         {
             // Check if the mouse is clicking a UI element
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return; // Exit the function so we don't toggle pause/resume via script
-        }
+
             if (GameIsPaused)
             {
                 Resume();
@@ -89,8 +89,8 @@ void OnPauseToggle(InputAction.CallbackContext context)
         OnControlsChanged(playerInput);
 
         EventSystem.current.SetSelectedGameObject(null);
-        GameObject firstButton = pauseMenuUI.GetComponentInChildren<Button>().gameObject;
-        EventSystem.current.SetSelectedGameObject(firstButton);
+        // GameObject firstButton = pauseMenuUI.GetComponentInChildren<Button>().gameObject;
+        // EventSystem.current.SetSelectedGameObject(firstButton);
 
         playerScript.enabled = false; // This stops Update/FixedUpdate in the player script
         if (Inventory != null)
@@ -102,7 +102,6 @@ void OnPauseToggle(InputAction.CallbackContext context)
   
     public void Resume()
     {
-        Debug.Log("Resume button was clicked!");
         GameIsPaused = false; //sets the pause state to false
         Time.timeScale = 1f; //resumes the game by setting time scale back to 1
         AudioListener.pause = false; //unpauses all audio in the game
@@ -116,10 +115,15 @@ void OnPauseToggle(InputAction.CallbackContext context)
         batteryIcon.SetActive(false);
     }
 
-    public void Exit()
+    public void TransitionToMenu()
     {
-       //for build testing not ready in editor yet but this would bring you to the main menu scene when the button is clicked in the pause menu
-        Application.Quit();
+
+    Time.timeScale = 1f; //reset time scale to 1 in case we are transitioning to the menu from a paused state, otherwise the menu will be frozen
+    AudioListener.pause = false;
+
+    // Change scene to main menu
+    SceneManager.LoadScene("MainMenu");
+        
 
     }
 
