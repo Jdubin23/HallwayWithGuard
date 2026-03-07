@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement; 
+using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class PauseMenu : MonoBehaviour
     private InputAction pauseAction; 
 
     [SerializeField] private GameObject pauseMenuUI; 
+    [SerializeField] private GameObject SettingsMenu; 
+    [SerializeField] private GameObject firstSettingsButton;
+    public GameObject menuButtonToSelect; // The 'Settings' button on the previous menu
+
     [SerializeField] private bool GameIsPaused; 
     [SerializeField] private PlayerController playerScript; 
 
@@ -37,7 +42,28 @@ public class PauseMenu : MonoBehaviour
             playerInput.onControlsChanged += OnControlsChanged; 
         }
     }
+    public void OpenSettings()
+{
+    SettingsMenu.SetActive(true);
+    pauseMenuUI.SetActive(false); // Hide the main buttons
+    EventSystem.current.SetSelectedGameObject(firstSettingsButton);
+}
+public void CloseSettings()
+{
+    // 1. Save any final changes
+    PlayerPrefs.Save();
 
+    // 2. Toggle Panels
+    SettingsMenu.SetActive(false);
+    pauseMenuUI.SetActive(true);
+
+    // 3. IMPORTANT: Snap controller focus back to the 'Settings' button
+    // This prevents the "lost highlight" bug on controllers.
+    if (EventSystem.current != null)
+    {
+        EventSystem.current.SetSelectedGameObject(menuButtonToSelect);
+    }
+}
     private void OnDisable()
     {
         pauseAction.Disable();
@@ -114,8 +140,22 @@ public class PauseMenu : MonoBehaviour
 
     void OnPauseToggle(InputAction.CallbackContext context)
     {
-        if (GameIsPaused) Resume();
-        else Pause();
+       if (SettingsMenu != null && SettingsMenu.activeSelf) 
+    {
+        return; 
+    }
+
+    if (context.performed)
+    {
+        if (GameIsPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
+    }
     }
 
     public void Pause()
