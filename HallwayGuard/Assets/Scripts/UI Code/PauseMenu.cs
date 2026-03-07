@@ -2,131 +2,179 @@ using UnityEngine;
 using UnityEngine.UI; 
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
 using UnityEngine.SceneManagement; 
-using System.Collections.Generic;
-
 
 public class PauseMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private PlayerControls playerControls; //reference to the player controller script to access the input system
-    [SerializeField] private PlayerInput playerInput; //recognizes which controls are being used
-    private InputAction pauseAction; //recognizes when you press a pause button
+    private PlayerControls playerControls;
+    [SerializeField] private PlayerInput playerInput; 
+    private InputAction pauseAction; 
 
-    [SerializeField] private GameObject pauseMenuUI; //reveals pause menu and allows it to be disabled
-    [SerializeField] private bool GameIsPaused; // allows for me to pause time when the game is paused and unpause when the game is resumed
-    [SerializeField] private PlayerController playerScript; // Drag your Player object here in Inspector
+    [SerializeField] private GameObject pauseMenuUI; 
+    [SerializeField] private bool GameIsPaused; 
+    [SerializeField] private PlayerController playerScript; 
 
-    [SerializeField] private InventoryManager Inventory; // Reference to the inventory manager to check if the player has the battery for the icon
+    [Header("UI Selection")]
+    [SerializeField] private GameObject firstButton; // Drag your 'Resume' button here
+    private Vector2 lastMousePosition;
 
+    [SerializeField] private InventoryManager Inventory; 
     [SerializeField] private GameObject batteryIcon;
 
     void Awake()
     {
-        playerControls = new PlayerControls(); //reference the change between UI and gameplay controls
+        playerControls = new PlayerControls();
     }
 
     private void OnEnable()
     {
-        pauseAction = playerControls.UI.Pause; //reference the pause button in the input system
-        pauseAction.Enable(); //enable the pause button to be recognized
-        pauseAction.performed += OnPauseToggle; //enables listener for the pause button to trigger the OnPauseToggle function when pressed
+        pauseAction = playerControls.UI.Pause; 
+        pauseAction.Enable(); 
+        pauseAction.performed += OnPauseToggle; 
 
         if (playerInput != null)
         {
-            playerInput.onControlsChanged += OnControlsChanged; //enable the player controls to be recognized
+            playerInput.onControlsChanged += OnControlsChanged; 
         }
     }
+
     private void OnDisable()
     {
         pauseAction.Disable();
-        pauseAction.performed -= OnPauseToggle; // removes the listener for the pause button when the script is disabled to prevent errors and unintended behavior
+        pauseAction.performed -= OnPauseToggle; 
         if (playerInput != null)
             playerInput.onControlsChanged -= OnControlsChanged;
     }
 
-private void OnControlsChanged(PlayerInput input)
+    void Update()
     {
-        // Check if the current scheme is "Gamepad" (or whatever yours is named)
+        if (!GameIsPaused) return;
+
+        // Detect if mouse moves while paused
+        Vector2 currentMousePos = Mouse.current.position.ReadValue();
+        if (Vector2.Distance(currentMousePos, lastMousePosition) > 2.0f)
+        {
+            ShowCursor();
+            // If mouse moves, clear gamepad selection so they don't fight
+            if (EventSystem.current.currentSelectedGameObject != null)
+                EventSystem.current.SetSelectedGameObject(null);
+        }
+        lastMousePosition = currentMousePos;
+
+        // Detect if Gamepad/Arrows are used while paused
+        if (IsNavigating())
+        {
+            HideCursor();
+            // Ensure a button is selected for the controller
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(firstButton);
+            }
+        }
+    }
+
+    private bool IsNavigating()
+{
+    // 1. Check Gamepad Stick/DPad
+    if (Gamepad.current != null)
+    {
+        if (Gamepad.current.leftStick.ReadValue().magnitude > 0.1f || 
+            Gamepad.current.dpad.ReadValue().magnitude > 0.1f) 
+            return true;
+    }
+
+    // 2. Check Keyboard Keys
+    if (Keyboard.current != null)
+    {
+        // WASD
+        bool wasd = Keyboard.current.wKey.isPressed || Keyboard.current.aKey.isPressed || 
+                    Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed;
+
+        // Arrows
+        bool arrows = Keyboard.current.upArrowKey.isPressed || Keyboard.current.downArrowKey.isPressed || 
+                      Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed;
+
+        if (wasd || arrows) return true;
+    }
+
+    return false;
+}
+
+    private void OnControlsChanged(PlayerInput input)
+    {
         if (input.currentControlScheme == "Gamepad")
         {
-            Cursor.lockState = CursorLockMode.Locked; //Locks the cursor.
-            Cursor.visible = false; //hide cursor for better gamepad experience.
+            HideCursor();
         }
         else
         {
-            Cursor.lockState = CursorLockMode.None; //unlocks the cursor so it can be used in the pause menu
-        Cursor.visible = true; //makes the cursor visible in the pause menu
+            ShowCursor();
         }
     }
 
-void OnPauseToggle(InputAction.CallbackContext context)
+    void OnPauseToggle(InputAction.CallbackContext context)
     {
-        if (context.control.device is Pointer) return;
-        if (context.performed) //only pause when the button is first pressed, not when it is held down
-        {
-            // Check if the mouse is clicking a UI element
-
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause(playerInput);
-            }
-        }
+        if (GameIsPaused) Resume();
+        else Pause();
     }
 
-    public void Pause(PlayerInput input)
+    public void Pause()
     {
-        GameIsPaused = true; //sets the pause state to true
-        Time.timeScale = 0f; //pauses the game by setting time scale to 0
-        AudioListener.pause = true; //pauses all audio in the game
-        pauseMenuUI.SetActive(true); //reveals the pause menu UI
+        GameIsPaused = true;
+        Time.timeScale = 0f;
+        AudioListener.pause = true;
+        pauseMenuUI.SetActive(true);
 
-        OnControlsChanged(playerInput);
+        // Capture mouse pos so we don't 'move' it immediately on pause
+        lastMousePosition = Mouse.current.position.ReadValue();
 
-        EventSystem.current.SetSelectedGameObject(null);
-        // GameObject firstButton = pauseMenuUI.GetComponentInChildren<Button>().gameObject;
-        // EventSystem.current.SetSelectedGameObject(firstButton);
-
-        playerScript.enabled = false; // This stops Update/FixedUpdate in the player script
-        if (Inventory != null)
+        // Check current device to decide if we show cursor or select button
+        if (playerInput.currentControlScheme == "Gamepad")
         {
-            batteryIcon.SetActive(Inventory.hasBattery);
+            HideCursor();
+            EventSystem.current.SetSelectedGameObject(firstButton);
         }
+        else
+        {
+            ShowCursor();
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        playerScript.enabled = false;
+        if (Inventory != null) batteryIcon.SetActive(Inventory.hasBattery);
     }
 
-  
     public void Resume()
     {
-        GameIsPaused = false; //sets the pause state to false
-        Time.timeScale = 1f; //resumes the game by setting time scale back to 1
-        AudioListener.pause = false; //unpauses all audio in the game
+        GameIsPaused = false;
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        pauseMenuUI.SetActive(false);
 
-        pauseMenuUI.SetActive(false); //hides the pause menu UI
-        
-        Cursor.lockState = CursorLockMode.Locked; //unlocks the cursor so it can be used in the pause menu
-        Cursor.visible = false; //makes the cursor invisible in the game menu
+        // Always lock cursor when going back to gameplay
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
-        playerScript.enabled = true; // This stops Update/FixedUpdate in the player script
+        playerScript.enabled = true;
         batteryIcon.SetActive(false);
+    }
+
+    private void HideCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void ShowCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void TransitionToMenu()
     {
-
-    Time.timeScale = 1f; //reset time scale to 1 in case we are transitioning to the menu from a paused state, otherwise the menu will be frozen
-    AudioListener.pause = false;
-
-    // Change scene to main menu
-    SceneManager.LoadScene("MainMenu");
-        
-
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        SceneManager.LoadScene("MainMenu");
     }
-
 }
-
-
