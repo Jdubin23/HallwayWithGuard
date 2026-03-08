@@ -42,7 +42,7 @@ public class LeverManager : MonoBehaviour
 
             if (currentStep >= correctOrder.Count)
             {
-                if (LaserGoneAudio != null && LaserGoneAudio.isPlaying)
+                if (LaserGoneAudio != null && !LaserGoneAudio.isPlaying)
                         {
                             LaserGoneAudio.Play();
                         }

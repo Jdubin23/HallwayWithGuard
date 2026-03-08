@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
     public float Speed = 5f;
     public Vector2 MovementInputVector;
     public Rigidbody rb;
+    public AudioSource MovementAudio;
+    public float footstepInterval = 0.5f; // Time between steps
+    private float footstepTimer;
+
 
 
     [Header("Camera Settings")]
@@ -114,8 +118,30 @@ public class PlayerController : MonoBehaviour
         //change the player object's position based on the input values
         Vector3 posChange = transform.right * MovementInputVector.x + transform.forward * MovementInputVector.y;
         //change position of object based on new vectors we collected
-        //transform.position += posChange * Time.deltaTime * Speed; //5f is the speed of the player, can be changed to make the player move faster or slower
         rb.linearVelocity = new Vector3(posChange.x * Speed, rb.linearVelocity.y, posChange.z * Speed);
+        if (IsGrounded && posChange.magnitude > 0.1f)
+    {
+        footstepTimer -= Time.fixedDeltaTime;
+
+        if (footstepTimer <= 0)
+        {
+            // Play the sound
+            if (MovementAudio != null)
+            {
+                // Optional: Vary the pitch slightly so it sounds more natural
+                MovementAudio.pitch = Random.Range(0.9f, 1.1f);
+                MovementAudio.Play();
+            }
+            
+            // Reset timer
+            footstepTimer = footstepInterval;
+        }
+    }
+    else
+    {
+        // Reset timer when standing still so the first step happens instantly next time
+        footstepTimer = 0; 
+    }
     }
 
     private void ManageCameraRotation()
