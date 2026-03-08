@@ -17,7 +17,7 @@ public class SettingsManager : MonoBehaviour
 
     [Header("References")]
     private PlayerController playerScript; // Drag your Player object here
-    private bool _blockSave = true; // The Muzzle: Starts as TRUE
+    private bool _blockSave = true; // Forces Audio to save
 
     void Start()
     {
@@ -27,14 +27,14 @@ public class SettingsManager : MonoBehaviour
     float savedVolume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
     float savedSens = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
 
-        // 3. Update UI (Only if Sliders are assigned - prevents errors in Game scene)
+        // Update UI based on saved values 
         if (volumeSlider != null) volumeSlider.value = savedVolume;
         if (sensitivitySlider != null) sensitivitySlider.value = savedSens;
 
-        // 4. Try to find the Player automatically if we are in the Game scene
+        // find the Player automatically if we are in the Game scene
         FindPlayer();
 
-        // 5. Initial Application
+        // Initial Application
         ApplyVolume(savedVolume);
         ApplySensitivity(savedSens);
     

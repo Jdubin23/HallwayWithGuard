@@ -35,7 +35,7 @@ public class GameEndManager : MonoBehaviour
         if (gameHasEnded) return;
         gameHasEnded = true;
 
-        // 1. FIND THE PAUSE MENU AND LOCK IT
+        // find and stop pause menu ui
         PauseMenu pauseScript = Object.FindFirstObjectByType<PauseMenu>();
         if (pauseScript != null)
         {
@@ -44,7 +44,7 @@ public class GameEndManager : MonoBehaviour
             pauseScript.enabled = false;   // This physically stops the Pause script from running
         }
 
-        // 2. FREEZE THE WORLD
+        // Freeze Game
         Time.timeScale = 0f;
         AudioListener.pause = true;
         if (playerScript != null) playerScript.enabled = false;
@@ -55,32 +55,31 @@ public class GameEndManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
         }
 
-        // 4. SHOW THE CORRECT UI
+        // Show correct ui
         GameObject targetUI = won ? winMenuUI : loseMenuUI;
-        // 4. SHOW THE CORRECT UI
-    targetUI.SetActive(true);
+        targetUI.SetActive(true);
 
-    // 5. MOUSE & CURSOR SETTINGS
-    lastMousePosition = Mouse.current.position.ReadValue();
-    
-    // Always show and unlock the cursor when the menu opens 
-    // so mouse users can immediately click buttons.
-    Cursor.visible = true;
-    Cursor.lockState = CursorLockMode.None;
+        // show cursor when menu opens
+        lastMousePosition = Mouse.current.position.ReadValue();
+        
+        // Always show and unlock the cursor when the menu opens 
+        // so mouse users can immediately click buttons.
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
-    if (playerInput.currentControlScheme == "Gamepad")
-    {
-        HideCursor(); // Only hide it if we are CERTAIN they are using a controller
-        GameObject btn = winMenuUI.activeSelf ? firstWinButton : firstLoseButton;
-        EventSystem.current.SetSelectedGameObject(btn);
-    }
+        if (playerInput.currentControlScheme == "Gamepad")
+        {
+            HideCursor(); // Only hide it if we are CERTAIN they are using a controller
+            GameObject btn = winMenuUI.activeSelf ? firstWinButton : firstLoseButton;
+            EventSystem.current.SetSelectedGameObject(btn);
+        }
     }
 
     void Update()
 {
     if (!gameHasEnded) return;
 
-    // 1. Detect Mouse Movement
+    // Detect Mouse Movement
     Vector2 currentMousePos = Mouse.current.position.ReadValue();
     float mouseDelta = Vector2.Distance(currentMousePos, lastMousePosition);
 
@@ -98,7 +97,7 @@ public class GameEndManager : MonoBehaviour
     }
     lastMousePosition = currentMousePos;
 
-    // 2. Detect Navigation (Gamepad/Keyboard)
+    // Detect which input method is being used
     if (IsNavigating())
     {
         HideCursor();

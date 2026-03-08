@@ -19,14 +19,14 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject winMenuUI;
     [SerializeField] private GameObject loseMenuUI;
     [SerializeField] private GameObject firstSettingsButton;
-    public GameObject menuButtonToSelect; // The 'Settings' button on the previous menu
+    public GameObject menuButtonToSelect; // 'Settings' button on the previous menu
 
     [Header("Check Game State")]
     [SerializeField] private bool GameIsPaused; 
     public bool isGameOver = false;    
 
     [Header("UI Selection")]
-    [SerializeField] private GameObject firstButton; // Drag your 'Resume' button here
+    [SerializeField] private GameObject firstButton; // The 'Resume' button 
     private Vector2 lastMousePosition;
 
     [SerializeField] private InventoryManager Inventory; 
@@ -56,14 +56,14 @@ public class PauseMenu : MonoBehaviour
 }
 public void CloseSettings()
 {
-    // 1. Save any final changes
+    // Save Changes
     PlayerPrefs.Save();
 
-    // 2. Toggle Panels
+    // Swap Panels
     SettingsMenu.SetActive(false);
     pauseMenuUI.SetActive(true);
 
-    // 3. IMPORTANT: Snap controller focus back to the 'Settings' button
+    // Swap focus from settings buttons to main menu buttons
     // This prevents the "lost highlight" bug on controllers.
     if (EventSystem.current != null)
     {
@@ -107,7 +107,7 @@ public void CloseSettings()
 
     private bool IsNavigating()
 {
-    // 1. Check Gamepad Stick/DPad
+    // Check Gamepad Stick/DPad
     if (Gamepad.current != null)
     {
         if (Gamepad.current.leftStick.ReadValue().magnitude > 0.1f || 
@@ -115,7 +115,7 @@ public void CloseSettings()
             return true;
     }
 
-    // 2. Check Keyboard Keys
+    // Check Keyboard Keys
     if (Keyboard.current != null)
     {
         // WASD
