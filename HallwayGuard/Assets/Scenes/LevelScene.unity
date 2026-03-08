@@ -2617,6 +2617,7 @@ Transform:
   - {fileID: 1527317383}
   - {fileID: 167053267}
   - {fileID: 99761343}
+  - {fileID: 1983217356}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &610739218
@@ -7562,6 +7563,96 @@ Transform:
   - {fileID: 1412078265}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1983217353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1983217356}
+  - component: {fileID: 1983217355}
+  - component: {fileID: 1983217354}
+  m_Layer: 0
+  m_Name: dome_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1983217354
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983217353}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e61716b6b233aa34e8c7755be03c5adf, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1983217355
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983217353}
+  m_Mesh: {fileID: 3267523986172519242, guid: 0bcde177407642746936ba40bf36c86f, type: 3}
+--- !u!4 &1983217356
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983217353}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.70710576, y: -0, z: -0, w: 0.7071079}
+  m_LocalPosition: {x: 0.44, y: -12.2, z: 13.900001}
+  m_LocalScale: {x: 42.679985, y: 42.67998, z: 42.67998}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 596994519}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!82 &1992243769 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 2287072506401588467, guid: 858badcb419a6e14aa75d537293adcce, type: 3}
@@ -7885,7 +7976,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2121119399
 Transform:
   m_ObjectHideFlags: 0
@@ -8805,7 +8896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: Sensitivity
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: MovementAudio
@@ -8813,7 +8904,7 @@ PrefabInstance:
       objectReference: {fileID: 9123816368805805022}
     - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: interactRange
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7394795589429708883, guid: 4da9889afc4758d468d1bddd3498add7, type: 3}
       propertyPath: CameraTransform

@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public Transform CameraTransform;             // Reference to the camera transform
     [SerializeField] private float controllerBaseWeight = 125f; // Multiplier to equal controller movement to mouse movement
     [SerializeField] private float mouseDamping = 0.05f; //limiter to reduce sensitivity back to normal amount
-    [SerializeField] private float interactRange = 5f;
+    [SerializeField] private float interactRange = 2f;
     [SerializeField] private LayerMask interactableLayer;
     private Camera cam;
 
