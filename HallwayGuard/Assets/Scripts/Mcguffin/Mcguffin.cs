@@ -7,9 +7,8 @@ public class Mcguffin : MonoBehaviour, Interactable
     public void Interact()
     {
         // Toggle the state
-       
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        // Perform the action
-       
+
+        FindFirstObjectByType<GameEndManager>().WinGame();        // Perform the action
+
     }
 }

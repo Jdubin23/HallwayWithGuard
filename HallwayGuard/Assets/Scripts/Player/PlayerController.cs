@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
 
     private void ManageCameraRotation()
     {
+        if (!this.enabled) return;
         // 1. Identify the device
         bool isGamepad = Gamepad.current != null &&
                          lookInputVector == Gamepad.current.rightStick.ReadValue();

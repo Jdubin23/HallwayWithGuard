@@ -7,17 +7,23 @@ using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
+    [Header("Input System References")]
     private PlayerControls playerControls;
     [SerializeField] private PlayerInput playerInput; 
     private InputAction pauseAction; 
+    [SerializeField] private PlayerController playerScript; 
 
+    [Header("UI Panels")]
     [SerializeField] private GameObject pauseMenuUI; 
     [SerializeField] private GameObject SettingsMenu; 
+    [SerializeField] private GameObject winMenuUI;
+    [SerializeField] private GameObject loseMenuUI;
     [SerializeField] private GameObject firstSettingsButton;
     public GameObject menuButtonToSelect; // The 'Settings' button on the previous menu
 
+    [Header("Check Game State")]
     [SerializeField] private bool GameIsPaused; 
-    [SerializeField] private PlayerController playerScript; 
+    public bool isGameOver = false;    
 
     [Header("UI Selection")]
     [SerializeField] private GameObject firstButton; // Drag your 'Resume' button here
@@ -140,6 +146,7 @@ public void CloseSettings()
 
     void OnPauseToggle(InputAction.CallbackContext context)
     {
+if (isGameOver) return;
        if (SettingsMenu != null && SettingsMenu.activeSelf) 
     {
         return; 

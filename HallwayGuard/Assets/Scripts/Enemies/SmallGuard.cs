@@ -208,7 +208,8 @@ public class SmallGuard : MonoBehaviour
         
         if (collision.transform == Player)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                FindFirstObjectByType<GameEndManager>().ActivateLoseUI();        // Perform the action
+
             
         }
     }

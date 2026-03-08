@@ -119,7 +119,8 @@ public class BigGuard : MonoBehaviour
         // Check if the object we bumped into is the player
         if (collision.transform == Player)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                FindFirstObjectByType<GameEndManager>().ActivateLoseUI();        // Perform the action
+
             
         }
     }
