@@ -16,46 +16,47 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private float defaultSensitivity = 2.0f;
 
     [Header("References")]
-    public PlayerController playerScript; // Drag your Player object here
-    public Volume globalVolume; // Drag your Global Volume here
-    private ColorAdjustments colorAdjustments; // Or ColorGrading for Built-in
+    private PlayerController playerScript; // Drag your Player object here
+    private bool _blockSave = true; // The Muzzle: Starts as TRUE
 
     void Start()
     {
-    
-    // The second parameter in GetFloat is the "Default Value" 
-    // it uses if it can't find a saved setting.
+
+    _blockSave = true;
+
     float savedVolume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
     float savedSens = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
 
-    // Set the sliders to these values
-    volumeSlider.value = savedVolume;
-    sensitivitySlider.value = savedSens;
+        // 3. Update UI (Only if Sliders are assigned - prevents errors in Game scene)
+        if (volumeSlider != null) volumeSlider.value = savedVolume;
+        if (sensitivitySlider != null) sensitivitySlider.value = savedSens;
 
-    // Apply them
-    ApplyVolume(savedVolume);
-    ApplySensitivity(savedSens);
+        // 4. Try to find the Player automatically if we are in the Game scene
+        FindPlayer();
+
+        // 5. Initial Application
+        ApplyVolume(savedVolume);
+        ApplySensitivity(savedSens);
+    
+    _blockSave = false;
     }
-    void Awake()
+    
+    private void FindPlayer()
     {
-        if (globalVolume != null && globalVolume.profile != null)
-    {
-        if (globalVolume.profile.TryGet(out ColorAdjustments ca))
+        if (playerScript == null)
         {
-            colorAdjustments = ca;
-            Debug.Log("Brightness System Linked Successfully!");
+            playerScript = Object.FindFirstObjectByType<PlayerController>();
         }
-        else
-        {
-            Debug.LogError("Color Adjustments override is missing from the Volume Profile!");
-        }
-    }
     }
 
     public void ApplyVolume(float value)
     {
         AudioListener.volume = value;
-        PlayerPrefs.SetFloat("MusicVolume", value);
+        if (!_blockSave)
+        {
+            PlayerPrefs.SetFloat("MusicVolume", value);
+            PlayerPrefs.Save(); 
+        }
     }
 
     public void ApplySensitivity(float value)
@@ -65,7 +66,11 @@ public class SettingsManager : MonoBehaviour
             // Update the variable in your PlayerController
             playerScript.Sensitivity = value; 
         }
-        PlayerPrefs.SetFloat("MouseSensitivity", value);
+        if (!_blockSave)
+        {
+            PlayerPrefs.SetFloat("MouseSensitivity", value);
+            PlayerPrefs.Save();
+        }
     }
 
     
