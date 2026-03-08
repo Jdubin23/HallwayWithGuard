@@ -47,6 +47,7 @@ public class LeverManager : MonoBehaviour
                             LaserGoneAudio.Play();
                         }
                 if (targetObject != null) targetObject.SetActive(false); // Make the door disappear if there is one assigned
+                ObjectiveManager.Instance.hasFlippedLevers = true;
             }
         }
         else

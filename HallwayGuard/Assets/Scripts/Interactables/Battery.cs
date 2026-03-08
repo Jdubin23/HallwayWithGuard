@@ -15,6 +15,8 @@ public class BatteryItem : MonoBehaviour, Interactable
         {
             PickupAudio.Play();
         }
+                ObjectiveManager.Instance.hasFoundBattery = true;
+
         // Make the physical item in the world disappear
         BatteryObject.SetActive(false);
     }
