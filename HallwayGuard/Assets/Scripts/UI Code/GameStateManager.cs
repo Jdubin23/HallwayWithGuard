@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameEndManager : MonoBehaviour
 {
@@ -21,97 +22,91 @@ public class GameEndManager : MonoBehaviour
     // Call this for Winning
     public void WinGame()
     {
-        TriggerEndSequence(true);
+        StartCoroutine(TriggerEndSequence(true));
     }
 
     // Call this for Losing/Death
     public void ActivateLoseUI()
     {
-        TriggerEndSequence(false);
+        StartCoroutine(TriggerEndSequence(false));
     }
 
-    private void TriggerEndSequence(bool won)
+    private IEnumerator TriggerEndSequence(bool won)
     {
-        if (gameHasEnded) return;
+        if (gameHasEnded) yield break;
         gameHasEnded = true;
 
-        // find and stop pause menu ui
+        // 1. Handle Pause Menu
         PauseMenu pauseScript = Object.FindFirstObjectByType<PauseMenu>();
         if (pauseScript != null)
         {
-            pauseScript.Resume(); // Reset timescale/audio via the pause script's own logic
-            pauseScript.isGameOver = true; // This flips the toggle in your PauseMenu inspector
-            pauseScript.enabled = false;   // This physically stops the Pause script from running
+            pauseScript.Resume();
+            pauseScript.isGameOver = true;
+            pauseScript.enabled = false;
         }
 
-        // Freeze Game
+        // 2. Freeze Game
         Time.timeScale = 0f;
         AudioListener.pause = true;
         if (playerScript != null) playerScript.enabled = false;
 
-        // 3. CLEAR THE EVENT SYSTEM (Crucial for Gamepad/Keyboard)
+        // 3. Clear the Event System immediately so no "ghost" highlights exist
         if (EventSystem.current != null)
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
 
-        // Show correct ui
+        // 4. Show correct UI
         GameObject targetUI = won ? winMenuUI : loseMenuUI;
         targetUI.SetActive(true);
 
-        // show cursor when menu opens
+        // 5. Setup Cursor
         lastMousePosition = Mouse.current.position.ReadValue();
-        
-        // Always show and unlock the cursor when the menu opens 
-        // so mouse users can immediately click buttons.
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
+        // --- THE FIX: WAIT BEFORE ENABLING BUTTON INTERACTION ---
+        // We use WaitForSecondsRealtime because Time.timeScale is 0
+        yield return new WaitForSecondsRealtime(0.15f);
+
+        // 6. Final Selection (Now happens after the tiny delay)
         if (playerInput.currentControlScheme == "Gamepad")
         {
-            HideCursor(); // Only hide it if we are CERTAIN they are using a controller
-            GameObject btn = winMenuUI.activeSelf ? firstWinButton : firstLoseButton;
+            HideCursor();
+            GameObject btn = won ? firstWinButton : firstLoseButton;
             EventSystem.current.SetSelectedGameObject(btn);
         }
     }
 
     void Update()
-{
-    if (!gameHasEnded) return;
-
-    // Detect Mouse Movement
-    Vector2 currentMousePos = Mouse.current.position.ReadValue();
-    float mouseDelta = Vector2.Distance(currentMousePos, lastMousePosition);
-
-    // If mouse moves even a little (lowered to 0.1f for better sensitivity)
-    if (mouseDelta > 0.1f)
     {
-        ShowCursor();
-        
-        // Clear gamepad selection so the "highlight" doesn't stay stuck 
-        // while you try to use the mouse
-        if (EventSystem.current.currentSelectedGameObject != null)
+        if (!gameHasEnded) return;
+
+        Vector2 currentMousePos = Mouse.current.position.ReadValue();
+        float mouseDelta = Vector2.Distance(currentMousePos, lastMousePosition);
+
+        if (mouseDelta > 0.1f)
         {
-            EventSystem.current.SetSelectedGameObject(null);
+            ShowCursor();
+            if (EventSystem.current.currentSelectedGameObject != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+        }
+        lastMousePosition = currentMousePos;
+
+        if (IsNavigating())
+        {
+            HideCursor();
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                GameObject btn = winMenuUI.activeSelf ? firstWinButton : firstLoseButton;
+                EventSystem.current.SetSelectedGameObject(btn);
+            }
         }
     }
-    lastMousePosition = currentMousePos;
 
-    // Detect which input method is being used
-    if (IsNavigating())
-    {
-        HideCursor();
-        
-        // Snap selection back to a button if the mouse had cleared it
-        if (EventSystem.current.currentSelectedGameObject == null)
-        {
-            GameObject btn = winMenuUI.activeSelf ? firstWinButton : firstLoseButton;
-            EventSystem.current.SetSelectedGameObject(btn);
-        }
-    }
-}
-
-private bool IsNavigating()
+    private bool IsNavigating()
 {
     // Check Gamepad
     if (Gamepad.current != null)

@@ -1,14 +1,25 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Required for scene management
-
 
 public class Mcguffin : MonoBehaviour, Interactable
 {
+    private bool _alreadyInteracted = false;
+
     public void Interact()
     {
-        // Toggle the state
+        if (_alreadyInteracted) return;
 
-        FindFirstObjectByType<GameEndManager>().WinGame();        // Perform the action
+        // Use a more reliable way to find the manager
+        GameEndManager gem = Object.FindFirstObjectByType<GameEndManager>();
 
+        if (gem != null)
+        {
+            _alreadyInteracted = true;
+            gem.WinGame(); // This calls the public method that starts the coroutine
+            
+        }
+        else
+        {
+            
+        }
     }
 }
