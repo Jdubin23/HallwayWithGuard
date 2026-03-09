@@ -1,34 +1,34 @@
 # HallwayWithGuard
 This is a Game Project made for a class assignment. The people in this group are Bella Ratrelli, Dominic Thorp, Florencia Orzejovsky, Jordon Dubin, Juan Martinez, and Thomas Picchi.
 
-Here are the controls
-**Keyboard**
+https://lunarrmoth.itch.io/cosmic-rogue
 
-     W - Move Forward
-     Up Arrow - Move Forward
 
-     A - Move Left
-     Left Arrow - Move Left
+**Controls**
 
-     S - Move Backwards
-     Down Arrow - Move Backwards
+Computer
 
-     D - Move Right
-     Right Arrow - Move Right
+    W or Up Arrow - Move Forward
+
+     A or Left Arrow - Move Left
+
+     S or Down Arrow- Move Backwards
+
+     D or  Right Arrow - Move Right
 
      Mouse - Looking Around 
 
-     Spacebar - Jump
+     Left Click - Select UI
 
      E - Interact
 
-**Controller**
+Controller
 
      Left Joystick - Looking Around
-     
+
      Right Joystick - Moving Around
 
-     East Button or RT - Interact
+     East Button - Interact
 
      South Button - Jump
     
