@@ -26,6 +26,8 @@ public class LeverManager : MonoBehaviour
                 {
                     NoPowerAudio.Play();
                 }
+            pulledLever.PulseLever();
+            pulledLever.SetLock(false);
             return; 
         }
 
@@ -56,6 +58,8 @@ public class LeverManager : MonoBehaviour
                 {
                     WrongLeverAudio.Play();
                 }
+            pulledLever.PulseLever();
+
             ResetLevers();
         }
     }
